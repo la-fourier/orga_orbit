@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "429705242947",
+    "project_id": "clicalendar-e88b7",
+    "storage_bucket": "clicalendar-e88b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:429705242947:android:b81838ec0b098433b2e7f6",
+        "android_client_info": {
+          "package_name": "com.example.orga_orbit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2dilioS80AlibB8aoVT_fqig5myZVk9w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
