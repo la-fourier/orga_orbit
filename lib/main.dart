@@ -4,8 +4,9 @@ import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
 import 'styles.dart';
+import 'pages/handler.dart';
 
-// TODO: Loading, Badges(mit News-Zahl), Pushes, Sync-Badge
+// TODO: Loading, Badges(mit News-Zahl), Pushes, Sync-Badge, Ext. Client-Client Encryption, Key-Peer-To-Peer Transfer
 
 void main() async {
   await Firebase.initializeApp(
@@ -13,73 +14,62 @@ void main() async {
   );
   runApp(
     ChangeNotifierProvider(
-      create: (context) => PageModel(),
+      create: (context) => PageHandler(),
       child: MyApp(),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
+ThemeManager _themeManager = ThemeManager();
+
+class MyApp extends StatefulWidget {
+  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    PageModel handler = context.read<PageModel>();
-    return MaterialApp(
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        primaryColor: primaryColor,
-        focusColor: accentColor,
-        highlightColor: secondaryColor,
-        useMaterial3: true,
-      ),
-      home: ChangeNotifierProvider(
-        create: (context) => PageModel(),
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Page Handling with Provider'),
-            actions: [
-              IconButton(onPressed: () => handler.navigateToPage(PageModel.PAGE1), icon: Icon(Icons.settings)),
-            ],
-          ),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                handler.buildBody(),
-                ElevatedButton(
-                  onPressed: () => handler.navigateToPage(PageModel.PAGE1),
-                  child: Text('Go to Page 1'),
-                ),
-                ElevatedButton(
-                  onPressed: () => handler.navigateToPage(PageModel.PAGE2),
-                  child: Text('Go to Page 2'),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  _MyAppState createState() => _MyAppState();
 }
 
-class PageModel extends ChangeNotifier {
-  static const PAGE1 = 'Page 1';
-  static const PAGE2 = 'Page 2';
+class _MyAppState extends State<MyApp> {
 
-  String _currentPage = PAGE1;
-
-  String get page => _currentPage;
-
-  void navigateToPage(String page) {
-    _currentPage = page;
-    notifyListeners();
+  @override
+  void dispose() {
+    _themeManager.removeListener(themeListener);
+    super.dispose();
   }
 
-  Widget buildBody() {
-    Widget result = Container();
-    switch (_currentPage) {
-      case 'Page 1': result = Container();
+  @override
+  void initState() {
+    _themeManager.addListener(themeListener);
+    super.initState();
+  }
+
+  themeListener(){
+    if(mounted){
+      setState(() {
+      });
     }
-    return result;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    PageHandler handler = context.read<PageHandler>();
+    TextTheme _textTheme = Theme.of(context).textTheme;
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    return MaterialApp(
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: _themeManager.themeMode,
+      debugShowCheckedModeBanner: false,
+      home: ChangeNotifierProvider(
+        create: (context) => PageHandler(),
+        child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: secondaryColor,
+              title: Text('Orga Orbit'),
+              actions: handler.buildActions(),
+            ),
+            backgroundColor: backgroundColor,
+            body: handler.buildBody()),
+      ),
+    );
   }
 }

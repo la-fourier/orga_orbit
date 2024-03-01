@@ -1,23 +1,25 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-void signIn() async {
+Future<User?> signIn(String email, String password) async {
   try {
-    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: "email@example.com",
-      password: "password",
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
     );
     User user = userCredential.user!;
-    print('Signed in as: ${user.uid}');
+    // print('Signed in as: ${user.uid}');
+    return user;
   } catch (e) {
-    print('Failed to sign in: $e');
+    // print('Failed to sign in: $e');
   }
 }
 
 void checkSignIn() {
   FirebaseAuth auth = FirebaseAuth.instance;
   if (auth.currentUser != null) {
-    print('User is signed in');
+    // print('User is signed in');
   } else {
-    print('User is not signed in');
+    // print('User is not signed in');
   }
 }
