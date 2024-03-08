@@ -1,31 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:orga_orbit/pages/forms.dart';
+import 'package:orga_orbit/styles.dart';
+import 'package:orga_orbit/backend/auth.dart' as auth;
 
 class PageHandler extends ChangeNotifier {
-  // VarName corresponds with path
-  static const PAGE1 = 'Page 1';
-  static const PAGE2 = 'Page 2';
+  static const EXTERN = "extern";
+  static const OVERVIEW = "overview";
   static const CALENDAR = "calendar";
   static const SETTINGS = "settings";
   static const ACCOUNT = "account";
 
-  var darkTheme = false;
+  var formData;
 
-  late User user;
   bool loggedIn = true;
+  // maybe some user id for crud on his acc
 
-  String _currentPage = PAGE1;
+  String _currentPage = EXTERN;
   int _subpage = 0;
 
   String get page => _currentPage;
   int get subpage => _subpage;
 
-  void setUser(Future<User?> user) async {
-    final User? usr = await user;
-    final User usr_ = usr!;
-    this.user = usr_;
-    _currentPage = PAGE1;
+  void loginUser(String email, String password) async {
+    int det = await auth.saveLogin(email, password);
+    if (det == 0) {
+    loggedIn = true;
+    _currentPage = OVERVIEW;
     notifyListeners();
+    }
   }
 
   void toPage(String page) {
@@ -38,7 +40,7 @@ class PageHandler extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Widget> buildActions() {
+  List<Widget> buildActions(ThemeManager _themeManager) {
     if (!this.loggedIn) {
       return [];
     }
@@ -46,29 +48,132 @@ class PageHandler extends ChangeNotifier {
       IconButton(onPressed: () => {}, icon: Icon(Icons.calendar_month)),
       Expanded(child: Container()),
       IconButton(
-        onPressed: () => this.toPage(PageHandler.PAGE1),
+        onPressed: () => this.toPage(PageHandler.SETTINGS),
         icon: Icon(Icons.settings),
       ),
       IconButton(
-        onPressed: () => this.toPage(PageHandler.PAGE2),
+        onPressed: () => this.toPage(PageHandler.ACCOUNT),
         icon: Icon(Icons.account_box),
       ),
       IconButton(onPressed: () => this.toPage(page), icon: Icon(Icons.logout)),
       IconButton(
-        onPressed: () => {darkTheme = (!darkTheme), notifyListeners()},
-        icon: darkTheme == true
+        onPressed: () =>
+            {_themeManager.toggleTheme(!_themeManager.isDarkMode()), notifyListeners() },
+        icon: _themeManager.isDarkMode()
             ? Icon(Icons.dark_mode_rounded)
             : Icon(Icons.light_mode_rounded),
       )
     ];
   }
 
-  Widget buildBody() {
+  Widget buildBody(ThemeManager _themeManager) {
     Widget result = Container();
-    switch (_currentPage) {
-      case PageHandler.PAGE1:
-        result = Text("Hey");
+    if (!loggedIn) {
+      formData = LoginFormData();
+      result = login();
+    } else {
+      switch (_currentPage) {
+        case PageHandler.EXTERN:
+          switch (subpage){
+            case 1: signup();
+            default: formData = LoginFormData(); result = login();
+          }
+        case PageHandler.OVERVIEW:
+          result = Row(children: [
+            Text("Hey"),
+            SizedBox(
+              width: 170,
+              height: 60,
+              child: TextField(
+                decoration: InputDecoration(labelText: "email"),
+                onChanged: (s) => {},
+              ),
+            ),
+          ]);
+      }
     }
     return result;
+  }
+
+  Widget login() {
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Login"),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 170,
+                    height: 60,
+                    child: TextField(
+                      controller: emailController,
+                      decoration: InputDecoration(labelText: "email"),
+                      onChanged: (s) => {formData.mail = s, notifyListeners()},
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 170,
+                    height: 60,
+                    child: TextField(
+                      obscureText: true,
+                      controller: passController,
+                      decoration: InputDecoration(labelText: "password"),
+                      onChanged: (s) => {formData.password = s, notifyListeners()},
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  ElevatedButton(
+                      onPressed: () => loginUser(formData.mail, formData.password),
+                      child: Text("login")),
+                  Container(
+                    width: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () => toSubpage(1),
+                    child: Text("signup"),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget signup() {
+    return Center(
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Row(
+          children: [
+            Text("Mail: "),
+            // Textfield
+          ],
+        ),
+        Row(
+          children: [
+            TextButton(
+              onPressed: () => {},
+              child: Text("Submit"),
+            ),
+            TextButton(
+              onPressed: () => {},
+              child: Text("Cancel"),
+            ),
+          ],
+        ),
+      ]),
+    );
   }
 }

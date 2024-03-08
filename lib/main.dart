@@ -22,32 +22,32 @@ void main() async {
 
 ThemeManager _themeManager = ThemeManager();
 
-class MyApp extends StatefulWidget {
-  // This widget is the root of your application.
-  @override
-  _MyAppState createState() => _MyAppState();
-}
+class MyApp extends StatelessWidget {
+//   // This widget is the root of your application.
+//   @override
+//   _MyAppState createState() => _MyAppState();
+// }
 
-class _MyAppState extends State<MyApp> {
+// class _MyAppState extends State<MyApp> {
 
-  @override
-  void dispose() {
-    _themeManager.removeListener(themeListener);
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _themeManager.removeListener(themeListener);
+  //   super.dispose();
+  // }
 
-  @override
-  void initState() {
-    _themeManager.addListener(themeListener);
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   _themeManager.addListener(themeListener);
+  //   super.initState();
+  // }
 
-  themeListener(){
-    if(mounted){
-      setState(() {
-      });
-    }
-  }
+  // themeListener(){
+  //   if(mounted){
+  //     setState(() {
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -62,13 +62,14 @@ class _MyAppState extends State<MyApp> {
       home: ChangeNotifierProvider(
         create: (context) => PageHandler(),
         child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: secondaryColor,
-              title: Text('Orga Orbit'),
-              actions: handler.buildActions(),
-            ),
-            backgroundColor: backgroundColor,
-            body: handler.buildBody()),
+          appBar: AppBar(
+            backgroundColor: secondaryColor,
+            title: Text('Orga Orbit'),
+            actions: handler.buildActions(_themeManager),
+          ),
+          backgroundColor: backgroundColor,
+          body: handler.buildBody(_themeManager),
+        ),
       ),
     );
   }
