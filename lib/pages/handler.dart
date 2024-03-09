@@ -110,7 +110,7 @@ class PageHandler extends ChangeNotifier {
                     width: 170,
                     height: 60,
                     child: TextField(
-                      controller: emailController,
+                      // controller: emailController,
                       decoration: InputDecoration(labelText: "email"),
                       onChanged: (s) => {formData.mail = s, notifyListeners()},
                     ),
@@ -124,7 +124,7 @@ class PageHandler extends ChangeNotifier {
                     height: 60,
                     child: TextField(
                       obscureText: true,
-                      controller: passController,
+                      // controller: passController,
                       decoration: InputDecoration(labelText: "password"),
                       onChanged: (s) => {formData.password = s, notifyListeners()},
                     ),
