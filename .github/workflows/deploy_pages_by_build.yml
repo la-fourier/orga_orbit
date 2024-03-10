@@ -10,9 +10,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Check if commit message contains 'publish'
-      run: echo ${{ github.event.head_commit.message }} | grep -q 'publish'
-      continue-on-error: true
+#    - name: Check if commit message contains 'publish'
+#      run: echo ${{ github.event.head_commit.message }} | grep -q 'publish'
+#      continue-on-error: true
 
     - name: Clone repository
       uses: actions/checkout@v2
