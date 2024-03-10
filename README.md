@@ -1,4 +1,4 @@
-[![Pages Deploy](https://github.com/la-fourier/orga_orbit/actions/workflows/web.yml/badge.svg)](https://github.com/la-fourier/orga_orbit/actions/workflows/web.yml)
+[![Pages Deploy](https://github.com/la-fourier/orga_orbit/actions/workflows/deploy.yml/badge.svg)](https://github.com/la-fourier/orga_orbit/actions/workflows/deploy.yml)
 
 # orga_orbit
 
