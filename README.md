@@ -1,3 +1,5 @@
+[![Pages Deploy](https://github.com/la-fourier/orga_orbit/actions/workflows/web.yml/badge.svg)](https://github.com/la-fourier/orga_orbit/actions/workflows/web.yml)
+
 # orga_orbit
 
 A new Flutter project.
