@@ -7,6 +7,7 @@ import 'styles.dart';
 import 'pages/handler.dart';
 
 // TODO: Loading, Badges(mit News-Zahl), Pushes, Sync-Badge, Ext. Client-Client Encryption, Key-Peer-To-Peer Transfer
+// TODO: Hosting
 
 void main() async {
   await Firebase.initializeApp(

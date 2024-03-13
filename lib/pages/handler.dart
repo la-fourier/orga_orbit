@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:orga_orbit/pages/forms.dart';
 import 'package:orga_orbit/styles.dart';
 import 'package:orga_orbit/backend/auth.dart' as auth;
+import 'login.dart';
+import 'signup.dart';
 
 class PageHandler extends ChangeNotifier {
   static const EXTERN = "extern";
@@ -10,10 +11,10 @@ class PageHandler extends ChangeNotifier {
   static const SETTINGS = "settings";
   static const ACCOUNT = "account";
 
-  var formData;
-
   bool loggedIn = true;
   // maybe some user id for crud on his acc
+
+  var form;
 
   String _currentPage = EXTERN;
   int _subpage = 0;
@@ -69,14 +70,14 @@ class PageHandler extends ChangeNotifier {
   Widget buildBody(ThemeManager _themeManager) {
     Widget result = Container();
     if (!loggedIn) {
-      formData = LoginFormData();
-      result = login();
+      form = LoginForm();
+      result = Login(form: form,);
     } else {
       switch (_currentPage) {
         case PageHandler.EXTERN:
           switch (subpage){
-            case 1: signup();
-            default: formData = LoginFormData(); result = login();
+            case 1: form = SignupForm(); result = Signup(form: form);
+            default: form = LoginForm(); result = Login(form: form,);
           }
         case PageHandler.OVERVIEW:
           result = Row(children: [
@@ -93,87 +94,5 @@ class PageHandler extends ChangeNotifier {
       }
     }
     return result;
-  }
-
-  Widget login() {
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Login"),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 170,
-                    height: 60,
-                    child: TextField(
-                      // controller: emailController,
-                      decoration: InputDecoration(labelText: "email"),
-                      onChanged: (s) => {formData.mail = s, notifyListeners()},
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 170,
-                    height: 60,
-                    child: TextField(
-                      obscureText: true,
-                      // controller: passController,
-                      decoration: InputDecoration(labelText: "password"),
-                      onChanged: (s) => {formData.password = s, notifyListeners()},
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  ElevatedButton(
-                      onPressed: () => loginUser(formData.mail, formData.password),
-                      child: Text("login")),
-                  Container(
-                    width: 20,
-                  ),
-                  ElevatedButton(
-                    onPressed: () => toSubpage(1),
-                    child: Text("signup"),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget signup() {
-    return Center(
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Row(
-          children: [
-            Text("Mail: "),
-            // Textfield
-          ],
-        ),
-        Row(
-          children: [
-            TextButton(
-              onPressed: () => {},
-              child: Text("Submit"),
-            ),
-            TextButton(
-              onPressed: () => {},
-              child: Text("Cancel"),
-            ),
-          ],
-        ),
-      ]),
-    );
   }
 }
