@@ -11,7 +11,7 @@ class PageHandler extends ChangeNotifier {
   static const SETTINGS = "settings";
   static const ACCOUNT = "account";
 
-  bool loggedIn = true;
+  bool loggedIn = false;
   // maybe some user id for crud on his acc
 
   var form;
@@ -23,8 +23,9 @@ class PageHandler extends ChangeNotifier {
   int get subpage => _subpage;
 
   void loginUser(String email, String password) async {
-    int det = await auth.saveLogin(email, password);
-    if (det == 0) {
+    // String det = await auth.saveLogin(email, password);
+    String det = await auth.AuthMethods().loginUser(email: email, password: password);
+    if (det == "success") {
     loggedIn = true;
     _currentPage = OVERVIEW;
     notifyListeners();
@@ -69,29 +70,23 @@ class PageHandler extends ChangeNotifier {
 
   Widget buildBody(ThemeManager _themeManager) {
     Widget result = Container();
-    if (!loggedIn) {
-      form = LoginForm();
-      result = Login(form: form,);
-    } else {
-      switch (_currentPage) {
-        case PageHandler.EXTERN:
-          switch (subpage){
-            case 1: form = SignupForm(); result = Signup(form: form);
-            default: form = LoginForm(); result = Login(form: form,);
-          }
-        case PageHandler.OVERVIEW:
-          result = Row(children: [
-            Text("Hey"),
-            SizedBox(
-              width: 170,
-              height: 60,
-              child: TextField(
-                decoration: InputDecoration(labelText: "email"),
-                onChanged: (s) => {},
-              ),
-            ),
-          ]);
-      }
+    switch (_currentPage) {
+      case PageHandler.EXTERN:
+        switch (subpage){
+          case 1: form = SignupForm(); result = Signup(form: form, handler: this,);
+          default: form = LoginForm(); result = Login(form: form, handler: this,);
+        }
+      case PageHandler.OVERVIEW:
+        result = Row(children: [
+          Text("Hey"),
+          SizedBox(
+            width: 170,
+            height: 60,
+          ),
+          Card(
+            child: Text("Hey!"),
+          ),
+        ]);
     }
     return result;
   }

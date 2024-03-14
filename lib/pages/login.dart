@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:orga_orbit/backend/auth.dart' as auth;
 import 'package:orga_orbit/pages/handler.dart';
 
 class LoginForm {
@@ -11,15 +10,32 @@ class Login extends StatefulWidget {
   Login({
     Key? key,
     required this.form,
+    required this.handler
   }) : super(key: key);
 
   LoginForm form;
+  PageHandler handler;
 
   @override
-  createState() => _LoginState();
+  createState() => _LoginState(handler: handler);
 }
 
 class _LoginState extends State<Login> {
+  _LoginState({
+    Key? key,
+    required this.handler,
+  }) : super();
+
+  PageHandler handler;
+  final TextEditingController _emailc = TextEditingController();
+  final TextEditingController _passwordc = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailc.dispose();
+    _passwordc.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +53,9 @@ class _LoginState extends State<Login> {
                     width: 170,
                     height: 60,
                     child: TextField(
-                      // controller: emailController,
+                      controller: _emailc,
                       decoration: InputDecoration(labelText: "email"),
-                      onChanged: (s) => {widget.form.email = s },
+                      // onChanged: (s) => { setState(() => widget.form.email = s) },
                     ),
                   ),
                 ],
@@ -51,9 +67,9 @@ class _LoginState extends State<Login> {
                     height: 60,
                     child: TextField(
                       obscureText: true,
-                      // controller: passController,
+                      controller: _passwordc,
                       decoration: InputDecoration(labelText: "password"),
-                      onChanged: (s) => {widget.form.password = s },
+                      onChanged: (s) => { setState(() => widget.form.password = s) },
                     ),
                   ),
                 ],
@@ -61,13 +77,13 @@ class _LoginState extends State<Login> {
               Row(
                 children: [
                   ElevatedButton(
-                      onPressed: () => {}, // loginUser(widget.email, widget.password),
+                      onPressed: () => { handler.loginUser(widget.form.email, widget.form.password) },
                       child: Text("login")),
                   Container(
                     width: 20,
                   ),
                   ElevatedButton(
-                    onPressed: () => {}, //toSubpage(1),
+                    onPressed: () => handler.toSubpage(1),
                     child: Text("signup"),
                   ),
                 ],

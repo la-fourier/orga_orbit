@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:orga_orbit/backend/auth.dart' as auth;
 import 'package:orga_orbit/pages/handler.dart';
 
 class SignupForm {
@@ -11,15 +10,23 @@ class Signup extends StatefulWidget {
   Signup({
     Key? key,
     required this.form,
+    required this.handler
   }) : super(key: key);
 
   SignupForm form;
+  PageHandler handler;
 
   @override
-  createState() => _SignupState();
+  createState() => _SignupState(handler: handler);
 }
 
 class _SignupState extends State<Signup> {
+  _SignupState({
+    Key? key,
+    required this.handler,
+  }) : super();
+
+  PageHandler handler;
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +41,11 @@ class _SignupState extends State<Signup> {
         Row(
           children: [
             TextButton(
-              onPressed: () => {},
+              onPressed: () => { },
               child: Text("Submit"),
             ),
             TextButton(
-              onPressed: () => {},
+              onPressed: () => { handler.toSubpage(0) },
               child: Text("Cancel"),
             ),
           ],
